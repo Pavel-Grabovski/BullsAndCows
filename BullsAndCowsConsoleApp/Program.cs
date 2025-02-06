@@ -21,27 +21,42 @@ internal class Program
         Update update,
         CancellationToken token)
     {
-        if(update.Type == Telegram.Bot.Types.Enums.UpdateType.Message)
+        if (update.Type == Telegram.Bot.Types.Enums.UpdateType.Message)
         {
             Message? message = update.Message;
 
             long chatId = message.Chat.Id;
-            string? text = message.Text; 
+            string? text = message.Text;
 
-            if(text == "/start")
+            if (text == "/start")
                 await SendResponseStartCommand(client, message, chatId);
         }
-        else if(update.Type == Telegram.Bot.Types.Enums.UpdateType.CallbackQuery)
+        else if (update.Type == Telegram.Bot.Types.Enums.UpdateType.CallbackQuery)
         {
             long chatId = update.CallbackQuery.Message.Chat.Id;
             var data = update.CallbackQuery.Data;
 
-
+            switch (data)
+            {
+                case "/rules":
+                    {
+                        await SendResponseRulesCommand(client, chatId);
+                        break;
+                    }
+            }
         }
+    }
 
+    private static async Task SendResponseRulesCommand(ITelegramBotClient client, long chatId)
+    {
+        string text = Constants.GetRules();
 
+        InlineKeyboardMarkup keyBoard = new([
+            [
+                InlineKeyboardButton.WithCallbackData("Играть", "/start_game")
+            ]]);
 
-        //await client.SendMessage(chatId, "test");
+        await client.SendMessage(chatId, text, replyMarkup: keyBoard);
     }
 
     private static async Task SendResponseStartCommand(ITelegramBotClient client, Message? message, long chatId)
