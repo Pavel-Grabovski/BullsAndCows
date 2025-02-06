@@ -29,18 +29,7 @@ internal class Program
             string? text = message.Text; 
 
             if(text == "/start")
-            {
-                string answer = $"Здравствуйте {message.From.FirstName}, вы зашли в игру быки и коровы! Выберете действие";
-
-                InlineKeyboardMarkup keyboard = new InlineKeyboardMarkup(
-                    [
-                        [InlineKeyboardButton.WithCallbackData("Правила игры", "/rules")],
-                        [InlineKeyboardButton.WithCallbackData("Начать играть", "/start_game")]
-                    ]
-                    );
-
-                await client.SendMessage(chatId, answer,replyMarkup: keyboard);
-            }
+                await SendResponseStartCommand(client, message, chatId);
         }
         else if(update.Type == Telegram.Bot.Types.Enums.UpdateType.CallbackQuery)
         {
@@ -55,7 +44,19 @@ internal class Program
         //await client.SendMessage(chatId, "test");
     }
 
+    private static async Task SendResponseStartCommand(ITelegramBotClient client, Message? message, long chatId)
+    {
+        string answer = $"Здравствуйте {message.From.FirstName}, вы зашли в игру быки и коровы! Выберете действие";
 
+        InlineKeyboardMarkup keyboard = new InlineKeyboardMarkup(
+            [
+                [InlineKeyboardButton.WithCallbackData("Правила игры", "/rules")],
+                        [InlineKeyboardButton.WithCallbackData("Начать играть", "/start_game")]
+            ]
+            );
+
+        await client.SendMessage(chatId, answer, replyMarkup: keyboard);
+    }
 
     private static async Task HandleError(
         ITelegramBotClient client,
