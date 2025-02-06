@@ -1,6 +1,6 @@
 ﻿namespace BullsAndCowsConsoleApp;
 
-public static class Constants
+public class Game
 {
     public static string GetRules()
     {
