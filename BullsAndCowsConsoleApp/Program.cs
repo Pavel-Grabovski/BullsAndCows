@@ -27,12 +27,12 @@ internal class Program
         {
             Message? message = update.Message;
 
-            long chatId = message.Chat.Id;
+            long chatId = message!.Chat.Id;
             string? text = message.Text;
 
             if (text == "/start")
                 await SendResponseStartGameCommand(client, message);
-            else if(text.Length > 0)
+            else if(text!.Length > 0)
             {
                 await SendResponseHowManyBullsAndCowsCommand(client, chatId, text);
             }
@@ -41,7 +41,7 @@ internal class Program
         }
         else if (update.Type == Telegram.Bot.Types.Enums.UpdateType.CallbackQuery)
         {
-            long chatId = update.CallbackQuery.Message.Chat.Id;
+            long chatId = update!.CallbackQuery!.Message!.Chat.Id;
             var data = update.CallbackQuery.Data;
 
             switch (data)
@@ -63,7 +63,7 @@ internal class Program
         }
     }
 
-    private static async Task SendResponseHowManyBullsAndCowsCommand(ITelegramBotClient client, long chatId, string? text)
+    private static async Task SendResponseHowManyBullsAndCowsCommand(ITelegramBotClient client, long chatId, string text)
     {
         // когда пользователь пытается угадать число
 
@@ -126,7 +126,7 @@ internal class Program
         string text = Game.GetRules();
 
         InlineKeyboardMarkup keyBoard = new([
-            [1
+            [
                 InlineKeyboardButton.WithCallbackData("Играть", "/start_game")
             ]]);
 
@@ -135,9 +135,9 @@ internal class Program
 
     private static async Task SendResponseStartGameCommand(ITelegramBotClient client, Message? message)
     {
-        long chatId = message.Chat.Id;
+        long chatId = message!.Chat.Id;
 
-        string answer = $"Здравствуйте {message.From.FirstName}, вы зашли в игру быки и коровы! Выберете действие";
+        string answer = $"Здравствуйте {message!.From!.FirstName}, вы зашли в игру быки и коровы! Выберете действие";
 
         InlineKeyboardMarkup keyboard = new InlineKeyboardMarkup(
             [
