@@ -14,7 +14,7 @@ internal class Program
         TelegramBotClient tgClient = new("7860010580:AAGIp8CKchbvH9XQc32wceTzZJG4JsH1vGQ");
         tgClient.StartReceiving(HandleUpdate, HandleError);
         Console.WriteLine("Bot started");
-        Console.ReadKey();
+        Console.Read();
     }
 
 
